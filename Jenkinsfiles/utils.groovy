@@ -25,9 +25,7 @@ def notify_irc(Map args) {
 def make(setup, cmd) {
     sh """
         . ${setup}
-        export KUBECONFIG=${env.HOME}/.kube/portland.config
-        kubectl config use-context portland.moz.works
-        make ${cmd} KUMA_IMAGE_TAG=${env.GIT_COMMIT_SHORT}
+        make ${cmd} KUMA_IMAGE_TAG=0c60774
     """
 }
 
@@ -37,14 +35,29 @@ def make_stage(cmd) {
 
 def migrate_stage_db() {
     make_stage('k8s-db-migration-job')
+    notify_irc([
+        irc_nick: 'mdnstagepush',
+        stage: 'Start DB Migration',
+        status: 'success'
+    ])
 }
 
 def deploy_kuma_to_stage() {
     make_stage('k8s-kuma-deployments')
+    notify_irc([
+        irc_nick: 'mdnstagepush',
+        stage: 'Start Kuma Rollout',
+        status: 'success'
+    ])
 }
 
 def monitor_deploy_kuma_to_stage() {
     make_stage('k8s-kuma-rollout-status')
+    notify_irc([
+        irc_nick: 'mdnstagepush',
+        stage: 'Kuma Rollout Completed',
+        status: 'success'
+    ])
 }
 
 return this;

@@ -1,7 +1,7 @@
 stage("Prepare Infra") {
     // Checkout the "mozmeao/infra" repo's "master" branch into the
     // "infra" sub-directory of the current working directory.
-    utils.checkout_github('mozmeao/infra', 'master', 'infra')
+    utils.checkout_github('escattone/infra', 'rj-use-home-in-configs', 'infra')
 }
 
 stage('Deploy') {
