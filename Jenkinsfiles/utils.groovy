@@ -15,7 +15,7 @@ def checkout_github(repo, branch, relative_target_dir) {
 }
 
 def notify_irc(Map args) {
-    def command = "scripts/irc-notify.sh"
+    def command = "${env.WORKSPACE}/scripts/irc-notify.sh"
     for (arg in args) {
         command += " --${arg.key} '${arg.value}'"
     }
